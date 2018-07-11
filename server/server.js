@@ -4,6 +4,7 @@ const express = require('express');
 const socketIO = require('socket.io');
 
 const {generateMessage, generateLocationMessage} = require('./utils/message');
+const {isRealString} = require('./utils/validation');
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
 //console.log(__dirname + '/../public');
@@ -18,9 +19,23 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
     console.log('New user connected');
 
-    socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
+    
 
-    socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
+    socket.on('join', (params, callback) => {
+        if (!isRealString(params.name) || !isRealString(params.room)) {
+            callback('Name and room name are required.');
+        }
+        socket.join(params.room);
+        // socket.leave('room name');
+
+        // io.emit -> io.to('room name').emit   (emit to everyone connected)
+        // socket.broadcast.emit -> socket.broadcast.to('room name').emit  (broadcast to everyone except current user)
+        // socket.emit  (emit to specified user)
+
+        socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
+        socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} has joined.`));
+        callback();
+    });
 
     socket.on('createMessage', (message, callback) => {
         console.log('createMessage', message);
