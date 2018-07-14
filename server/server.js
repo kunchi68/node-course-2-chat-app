@@ -27,6 +27,7 @@ io.on('connection', (socket) => {
             return callback('Name and room name are required.');
         }
 
+        params.room = params.room.toLowerCase();
         socket.join(params.room);
         users.removeUser(socket.id);
         users.addUser(socket.id, params.name, params.room);
