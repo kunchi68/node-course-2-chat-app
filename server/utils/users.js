@@ -40,6 +40,10 @@ class Users {
 
         return namesArray;
     }
+
+    isUserInRoom(name, room) {
+        return this.users.find((user) => user.name === name && user.room === room);
+    }
 }
 
 module.exports = {Users};
