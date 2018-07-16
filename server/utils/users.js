@@ -41,6 +41,18 @@ class Users {
         return namesArray;
     }
 
+    getRoomList() {
+        var u = {};
+        var rooms = [];
+        for (var i = 0, n = this.users.length; i < n; ++i) {
+            if (!u.hasOwnProperty(this.users[i].room)) {
+                rooms.push(this.users[i].room);
+                u[this.users[i].room] = 1;
+            }
+        }
+        return rooms;
+    }
+
     isUserInRoom(name, room) {
         return this.users.find((user) => user.name === name && user.room === room);
     }

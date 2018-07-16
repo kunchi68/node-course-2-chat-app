@@ -10,15 +10,15 @@ describe('Users', () => {
         users.users = [{
             id: '1',
             name: 'Mike',
-            room: 'room A'
+            room: 'ROOM A'
         }, {
             id: '2',
             name: 'Jen',
-            room: 'room B'
+            room: 'ROOM B'
         }, {
             id: '3',
             name: 'Julie',
-            room: 'room A'
+            room: 'ROOM A'
         }];
     });
 
@@ -27,7 +27,7 @@ describe('Users', () => {
         var user = {
             id: '123',
             name: 'Quincy',
-            room: 'room A'
+            room: 'ROOM A'
         };
         var resUser = users.addUser(user.id, user.name, user.room);
 
@@ -63,14 +63,20 @@ describe('Users', () => {
     });
 
     it('should return names for room A', () => {
-        var userList = users.getUserList('room A');
+        var userList = users.getUserList('ROOM A');
 
         expect(userList).toEqual(['Mike', 'Julie']);
     });
 
     it('should return names for room B', () => {
-        var userList = users.getUserList('room B');
+        var userList = users.getUserList('ROOM B');
 
         expect(userList).toEqual(['Jen']);
+    });
+
+    it('should return all unique room anme', () => {
+        var roomList = users.getRoomList();
+
+        expect(roomList).toEqual(['ROOM A', 'ROOM B']);
     });
 });
