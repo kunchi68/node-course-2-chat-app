@@ -6,6 +6,7 @@
     <title>Join | ChatApp</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/select-editable.css">
 </head>
 
 <body class="centered-form">
@@ -20,14 +21,22 @@
             </div>
             <div class="form-field">
                 <label>Room name</label>
-                <input type="text" name="room"/>
+                <div class="select-editable">
+                    <select id="room-list" onchange="this.nextElementSibling.value=this.value">
+                    </select>
+                    <input type="text" name="room" onchange="this.previousElementSibling.selectedIndex = -1"/>
+                </div>
             </div>
             <div class="form-field">
                 <button>Join</button>
             </div>
         </form>
-        
     </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/libs/jquery-3.2.1.min.js"></script>
+    <script src="/js/libs/mustache.js"></script>
+    <script src="/js/index.js"></script>
 </body>
 
 </html>

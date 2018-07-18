@@ -66,6 +66,12 @@ io.on('connection', (socket) => {
         }
     });
 
+    socket.on('getRoomList', () => {
+        var rooms = users.getRoomList();
+        //console.log(rooms);
+        socket.emit('roomList', rooms);
+    });
+
     socket.on('disconnect', () => {
         var user = users.removeUser(socket.id);
 
