@@ -1,3 +1,4 @@
+const _= require('lodash');
 const path = require('path');
 const http = require('http');
 const express = require('express');
@@ -5,8 +6,8 @@ const bodyParser = require('body-parser');
 const socketIO = require('socket.io');
 
 // Todo app variables
+const {ObjectID} = require('mongodb');
 var {mogoose} = require('./db/mongoose');
-var {ObjectID} = require('mongodb');
 var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
 
@@ -87,6 +88,32 @@ app.delete('/todos/:id', (req, res) => {
     });
 });
 
+app.patch('/todos/:id', (req, res) => {
+    var id = req.params.id;
+    // _.pick pull properties from an object
+    var body = _.pick(req.body, ['text', 'completed']);
+
+    if (!ObjectID.isValid(id)) {
+        return res.status(404).send();
+    }
+
+    if (_.isBoolean(body.completed) && body.completed) {
+        body.completedAt = new Date().getTime();
+    } else {
+        body.completed = false;
+        body.completedAt = null;
+    }
+
+    Todo.findByIdAndUpdate(id, {$set: body}, {new : true}).then((todo) => {
+        if (!todo) {
+            return res.status(404).send();
+        }
+
+        res.send({todo});
+    }).catch((e) => {
+        res.status(400).send();
+    });
+});
 
 //============================//
 //============================//
