@@ -1,3 +1,5 @@
+require('./config/config');
+
 const _= require('lodash');
 const path = require('path');
 const http = require('http');
@@ -17,7 +19,7 @@ const {isRealString} = require('./utils/validation');
 const {Users} = require('./utils/users');
 
 const publicPath = path.join(__dirname, '../public');
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 //console.log(__dirname + '/../public');
 //console.log(publicPath);
 
