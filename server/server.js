@@ -12,6 +12,7 @@ const {ObjectID} = require('mongodb');
 var {mogoose} = require('./db/mongoose');
 var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
+var {authenticate} = require('./middleware/authenticate');
 
 // Chat room app variables
 const {generateMessage, generateLocationMessage} = require('./utils/message');
@@ -129,6 +130,10 @@ app.post('/users', (req, res) => {
     }).catch((e) => {
         res.status(400).send(e);
     });
+});
+
+app.get('/users/me', authenticate, (req, res) => {
+    res.send(req.user);
 });
 
 //============================//

@@ -35,6 +35,7 @@ var UserSchema = new mongoose.Schema({
     }]
 });
 
+// statics are the methods defined on the Model. methods are defined on the document (instance).
 UserSchema.methods.toJSON = function () {
     var user = this;
     var userObject = user.toObject();
@@ -51,6 +52,26 @@ UserSchema.methods.generateAuthToken = function() {
 
     return user.save().then(()=> {
         return token;
+    });
+};
+
+UserSchema.statics.findByToken = function (token) {
+    var User = this;
+    var decoded;
+
+    try {
+        decoded = jwt.verify(token, 'abc123');
+    } catch (e) {
+        // return new Promise((resolve, reject) => {
+        //     reject();
+        // })
+        return Promise.reject();
+    }
+    
+    return User.findOne({
+        _id: decoded._id,
+        'tokens.token': token,
+        'tokens.access': 'auth'
     });
 };
 
