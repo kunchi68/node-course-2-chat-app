@@ -46,7 +46,7 @@ describe('Users', () => {
         var userId = '99';
         var user = users.removeUser(userId);
 
-        expect(user).toNotExist();
+        expect(user).toBeFalsy();
         expect(users.users.length).toBe(3);
     });
     
@@ -59,7 +59,7 @@ describe('Users', () => {
     it('should not find user', () => {
         var userId = '99';
         var user = users.getUser(userId);
-        expect(user).toNotExist();
+        expect(user).toBeFalsy();
     });
 
     it('should return names for room A', () => {

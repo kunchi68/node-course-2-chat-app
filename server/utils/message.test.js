@@ -8,8 +8,8 @@ describe('generateMessage', () => {
         var text = 'Some message';
         var message = generateMessage(from, text);
 
-        expect(message.createAt).toBeA('number');
-        expect(message).toInclude({from, text});
+        expect(typeof message.createAt).toBe('number');
+        expect(message).toMatchObject({from, text});
     })
 });
 
@@ -21,7 +21,7 @@ describe('generateLocationMessage', () => {
         var url = 'https://www.google.com/maps?q=15,19';
         var message = generateLocationMessage(from, latitude, longitude);
 
-        expect(message.createAt).toBeA('number');
-        expect(message).toInclude({from, url});
+        expect(typeof message.createAt).toBe('number');
+        expect(message).toMatchObject({from, url});
     });
 });
