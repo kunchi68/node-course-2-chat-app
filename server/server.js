@@ -170,8 +170,7 @@ app.delete('/users/me/token', authenticate, (req, res) => {
 
 // Chat room app methods
 io.on('connection', (socket) => {
-    console.log('New user connected');
-
+    //console.log('New user connected');
     socket.on('join', (params, callback) => {
         params.room = params.room.toLowerCase();
 
