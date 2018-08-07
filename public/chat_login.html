@@ -11,18 +11,20 @@
 </head>
 
 <body>
-    <form class="form-signin" action="/chat.html">
-        <h1 class="h3 mb-3 font-weight-normal">Join a Chat</h1>
-        <label class="sr-only">Display name</label>
-        <input class="form-control" type="display_name" name="name" placeholder="Display name" required autofocus/>
-        <label class="sr-only">Room name</label>
-        <div class="select-editable">
-            <select id="room-list" onchange="this.nextElementSibling.value=this.value"></select>
-            <input class="form-control" type="room_name" name="room" placeholder="Room name" required onchange="this.previousElementSibling.selectedIndex = -1">
-        </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Join</button>
-        <p class="mt-5 mb-3 text-muted">&copy; 2018 by Quincy Liu</p>
-    </form>
+    <div class="container">
+        <form class="form-signin" action="/chat.html">
+            <h1 class="h3 mb-3 font-weight-normal">Join a Chat</h1>
+            <label class="sr-only">Display name</label>
+            <input class="form-control" type="display_name" name="name" placeholder="Display name" required autofocus/>
+            <label class="sr-only">Room name</label>
+            <div class="select-editable">
+                <select id="room-list" onchange="this.nextElementSibling.value=this.value"></select>
+                <input class="form-control" type="room_name" name="room" placeholder="Room name" required onchange="this.previousElementSibling.selectedIndex = -1">
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Join</button>
+            <p class="mt-5 mb-3 text-muted">&copy; 2018 by Quincy Liu</p>
+        </form>
+    </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/libs/jquery-3.2.1.min.js"></script>
