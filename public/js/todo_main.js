@@ -5,6 +5,56 @@ jQuery('#link_register').show();
 jQuery('#link_login').hide();
 jQuery('#link_logout').hide();
 
+var div_main = jQuery("#div_main");
+var div_content = jQuery("#div_content");
+div_main.load(form_file + " #form_login", load_login_form);
+
+jQuery('#link_logout').on('click', function (e) {
+    e.preventDefault();
+    
+    $.ajax({
+        type: "DELETE",
+        url: "/users/me/token",
+        xhrFields: {
+            withCredentials: true
+        },
+        crossDomain: true,
+        headers: {'x-auth': mytoken},
+        success: function() {
+            jQuery('#link_register').show();
+            jQuery('#link_login').hide();
+            jQuery('#link_logout').hide();
+            alert("Logout successfully!!!");
+        }
+    }).done(function() {
+        div_main.load(form_file + " #form_login", load_login_form);
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        alert("Logout failed!!!");
+        div_main.load(form_file + " #form_login", load_login_form);
+    });
+});
+
+jQuery('#link_register').on('click', function(e) {
+    e.preventDefault();
+
+    jQuery('#link_register').hide();
+    jQuery('#link_login').show();
+    jQuery('#link_logout').hide();
+
+    div_main.load(form_file + " #form_register", load_register_form);
+});
+
+jQuery('#link_login').on('click', function(e) {
+    e.preventDefault();
+
+    jQuery('#link_register').show();
+    jQuery('#link_login').hide();
+    jQuery('#link_logout').hide();
+
+    div_main.load(form_file + " #form_login", load_login_form);
+});
+
+
 function load_login_form() {
     var form = $('#form_login');
     form.on('submit', function (e) {
@@ -41,6 +91,7 @@ function load_login_form() {
             contentType: "application/json"
         }).done(function() {
             //window.location.href = "/todo_main.html";
+            div_main.load(form_file + " #form_new_todo", load_new_todo_form);
         }).fail(function(jqXHR, textStatus, errorThrown) {
             alert("Login failed!!!");
         });
@@ -72,6 +123,7 @@ function load_register_form() {
             },
             crossDomain: true,
             data: JSON.stringify(json),
+            contentType: "application/json",
             success: function(output, status, xhr) {
                 mytoken = xhr.getResponseHeader('x-auth');
                 jQuery('#link_register').hide();
@@ -82,7 +134,7 @@ function load_register_form() {
             dataType: "json",
             contentType: "application/json"
         }).done(function() {
-            //window.location.href = "/todo_main.html";
+            div_main.load(form_file + " #form_new_todo", load_new_todo_form);
         }).fail(function(jqXHR, textStatus, errorThrown) {
             alert("Register failed!!!");
         });
@@ -90,53 +142,81 @@ function load_register_form() {
     });
 }
 
-
-var div_main = jQuery("#div_main");
-div_main.load(form_file + " #form_login", load_login_form);
-
-jQuery('#link_logout').on('click', function (e) {
-    e.preventDefault();
-    //alert(mytoken);
-    
+function load_todo_list() {
     $.ajax({
-        type: "DELETE",
-        url: "/users/me/token",
+        type: "GET",
+        url: "/todos",
         xhrFields: {
             withCredentials: true
         },
         crossDomain: true,
         headers: {'x-auth': mytoken},
-        success: function() {
-            jQuery('#link_register').show();
-            jQuery('#link_login').hide();
-            jQuery('#link_logout').hide();
-            alert("Logout successfully!!!");
+        success: function(output, status, xhr) {
+            alert("Get todo list successfully!");
         }
-    }).done(function() {
-        div_main.load(form_file + " #form_login", load_login_form);
+    }).done(function(data) {
+        var template = jQuery('#todo-item-template').html();
+        div_content.empty();
+        var table = $('<table>').addClass('table table-bordered');
+        table.append('<tr><th>Todo item</th><th>Completed</th><th>Completed time</th><th>Operations</th></tr>')
+        $.each(data['todos'], function() {
+            //alert(JSON.stringify(this));
+            var completedStr = 'No';
+            var formattedTime = '';
+            if (this['completedAt']) formattedTime = moment(this['completedAt']).format('h:mm a');
+            if (this['completed']) completedStr = 'Yes';
+            var html = Mustache.render(template, {
+                text: this['text'],
+                completed: completedStr,
+                completedAt: formattedTime
+            });
+            table.append(html);
+        });
+        div_content.append(table);
     }).fail(function(jqXHR, textStatus, errorThrown) {
-        alert("Logout failed!!!");
-        div_main.load(form_file + " #form_login", load_login_form);
+        alert("Get todo list failed!!!");
     });
-});
+}
+
+function load_new_todo_form() {
+    load_todo_list();
+
+    var form = $('#form_new_todo');    
+    form.on('submit', function (e) {
+        e.preventDefault();
+
+        var formData = form.serializeArray();
+        var json = {};
+        
+        $.each(formData, function() {
+            if (this.name == "todo_item") {
+                json["text"] = this.value || '';
+            }
+        });
+    
+        //alert(JSON.stringify(json));
+
+        $.ajax({
+            type: "POST",
+            url: "/todos",
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            headers: {'x-auth': mytoken},
+            data: JSON.stringify(json),
+            success: function(output, status, xhr) {
+                alert("New todo item is added successfully!");
+            },
+            dataType: "json",
+            contentType: "application/json"
+        }).done(function() {
+            load_todo_list();
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            alert("Add new todo item failed!!!");
+        });
+
+    });
+}
 
 
-jQuery('#link_register').on('click', function(e) {
-    e.preventDefault();
-
-    jQuery('#link_register').hide();
-    jQuery('#link_login').show();
-    jQuery('#link_logout').hide();
-
-    div_main.load(form_file + " #form_register", load_register_form);
-});
-
-jQuery('#link_login').on('click', function(e) {
-    e.preventDefault();
-
-    jQuery('#link_register').show();
-    jQuery('#link_login').hide();
-    jQuery('#link_logout').hide();
-
-    div_main.load(form_file + " #form_login", load_login_form);
-});

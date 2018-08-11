@@ -14,9 +14,9 @@
     <form id="form_login" class="form-signin" method="POST">
         <h1 class="h3 mb-3 font-weight-normal">User login</h1>
         <label for="email" class="sr-only">Email address</label>
-        <input type="email" name="email" id="email" class="form-control" placeholder="Enter Email" required autofocus>
+        <input value="quincy@example.com" type="email" name="email" id="email" class="form-control" placeholder="Enter Email" required autofocus>
         <label for="password" class="sr-only">Password</label>
-        <input type="password" name="password" id="password" class="form-control" placeholder="Enter Password" required>
+        <input value="123abc@" type="password" name="password" id="password" class="form-control" placeholder="Enter Password" required>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
     </form>
 
@@ -31,22 +31,12 @@
         <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
     </form>
 
-    <footer class="text-muted">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                </div>
-                <div class="col-md-4">
-                    <p>Contact</p>
-                    <a href="mailto:kunchi68@gmail.com">kunchi68@gmail.com</a>
-                </div>
-                <div class="col-md-4">
-                    <p>&copy; 2018 by Quincy Liu</p>
-                </div>
-            </div>
-            
-        </div>
-    </footer>
+    <form id="form_new_todo" class="form-signin" method="POST">
+        <h1 class="h3 mb-3 font-weight-normal">Add new todo item</h1>
+        <input type="text" name="todo_item" id="todo_item" placeholder="New todo item" required autofocus>
+        <button  type="submit">Add</button>
+    </form>
+
 </body>
 
 </html>
