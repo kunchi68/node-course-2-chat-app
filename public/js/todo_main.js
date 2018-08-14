@@ -1,10 +1,5 @@
 var mytoken;
 var form_file = "todo_forms.html";
-
-jQuery('#link_register').show();
-jQuery('#link_login').hide();
-jQuery('#link_logout').hide();
-
 var div_main = jQuery("#div_main");
 var div_content = jQuery("#div_content");
 div_main.load(form_file + " #form_login", load_login_form);
