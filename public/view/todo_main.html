@@ -71,10 +71,14 @@
 
     <script id="todo-item-template" type="text/template">
         <tr>
+            <td style='display:none'>{{id}}</td>
             <td>{{text}}</td>
-            <td>{{completed}}</td>
+            <td><input type='checkbox' {{completed}}></td>
             <td>{{completedAt}}</td>
-            <td><button>Update</button><button>Delete</button></td>
+            <td>
+                <a id="todo_update" href='#'>Update</a>
+                <a id="todo_delete" href='#'>Delete</a>
+            </td>
         </tr>
     </script>
 
